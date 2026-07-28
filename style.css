@@ -1,0 +1,686 @@
+/* ==========================================================================
+   Bedtime Surahs & Duas - Premium UI/UX Design (Light Mode)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Theme Variables - Clean Light Mode Palette
+   -------------------------------------------------------------------------- */
+:root {
+  /* Background & Surface */
+  --bg-gradient-start: #f0fdf4;
+  --bg-gradient-end: #ecfdf5;
+  --card-bg: #ffffff;
+  --card-bg-hover: #f8fafc;
+  --header-bg: #f1f5f9;
+  --card-border: #d1d5db;
+  --card-border-hover: #34d399;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+  /* Text Colors - Brighter & Bolder */
+  --text-primary: #0f172a;
+  --text-secondary: #1e293b;
+  --text-muted: #475569;
+  --text-gold: #b45309;
+
+  /* Accent Colors */
+  --emerald-primary: #059669;
+  --emerald-deep: #047857;
+  --emerald-light: #d1fae5;
+  --emerald-glow: rgba(5, 150, 105, 0.15);
+  --gold-accent: #d97706;
+  --gold-glow: rgba(217, 119, 6, 0.15);
+
+  /* Section Backgrounds */
+  --arabic-bg: #f0fdf4;
+  --arabic-border: #a7f3d0;
+  --bengali-pron-bg: #f8fafc;
+  --bengali-mean-bg: #fffbeb;
+
+  /* Fonts */
+  --font-arabic: "Amiri", "Noto Naskh Arabic", serif;
+  --font-bengali: "Noto Serif Bengali", "Hind Siliguri", serif;
+  --font-display: "Noto Serif Bengali", serif;
+
+  /* Borders & Radius */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 28px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-glow: 0 0 40px rgba(5, 150, 105, 0.08);
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. Global Reset & Base
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  background: linear-gradient(
+    145deg,
+    var(--bg-gradient-start) 0%,
+    var(--bg-gradient-end) 50%,
+    #f8fafc 100%
+  );
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-bengali);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Subtle decorative background overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(5, 150, 105, 0.06), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(5, 150, 105, 0.04), transparent),
+    radial-gradient(2px 2px at 50px 160px, rgba(5, 150, 105, 0.05), transparent),
+    radial-gradient(2px 2px at 90px 40px, rgba(5, 150, 105, 0.03), transparent),
+    radial-gradient(2px 2px at 130px 80px, rgba(5, 150, 105, 0.04), transparent),
+    radial-gradient(3px 3px at 160px 180px, rgba(5, 150, 105, 0.06), transparent),
+    radial-gradient(2px 2px at 200px 50px, rgba(5, 150, 105, 0.03), transparent),
+    radial-gradient(2px 2px at 250px 120px, rgba(5, 150, 105, 0.05), transparent),
+    radial-gradient(3px 3px at 300px 200px, rgba(5, 150, 105, 0.04), transparent),
+    radial-gradient(2px 2px at 350px 60px, rgba(5, 150, 105, 0.03), transparent),
+    radial-gradient(2px 2px at 400px 150px, rgba(5, 150, 105, 0.06), transparent),
+    radial-gradient(3px 3px at 450px 90px, rgba(5, 150, 105, 0.04), transparent),
+    radial-gradient(2px 2px at 500px 180px, rgba(5, 150, 105, 0.05), transparent),
+    radial-gradient(2px 2px at 550px 40px, rgba(5, 150, 105, 0.03), transparent);
+  background-size: 600px 250px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --------------------------------------------------------------------------
+   3. Progress Bar
+   -------------------------------------------------------------------------- */
+#progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    var(--emerald-primary),
+    var(--gold-accent),
+    var(--emerald-primary)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+  transition: width 0.15s ease-out;
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 0 12px var(--emerald-glow);
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* --------------------------------------------------------------------------
+   4. Main Container
+   -------------------------------------------------------------------------- */
+.reading-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   5. Top Title / Hero Section
+   -------------------------------------------------------------------------- */
+.top-title-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+/* Decorative glow behind moon */
+.top-title-section::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(217, 119, 6, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.moon-symbol {
+  font-size: 3.2rem;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+  animation: float 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(217, 119, 6, 0.2));
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.title-bn {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--emerald-deep);
+  margin-bottom: 0.35rem;
+  text-shadow: 0 2px 20px rgba(5, 150, 105, 0.12);
+  letter-spacing: 0.02em;
+}
+
+.title-en {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-gold);
+  margin-bottom: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-bengali);
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+/* Decorative divider */
+.top-title-section::after {
+  content: "✦ ✦ ✦";
+  display: block;
+  margin-top: 1.5rem;
+  color: var(--emerald-primary);
+  font-size: 0.85rem;
+  letter-spacing: 0.5em;
+  opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   6. Collapsible Cards
+   -------------------------------------------------------------------------- */
+.reading-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.reading-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition:
+    border-color var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    transform var(--transition-smooth);
+}
+
+.reading-card:hover {
+  border-color: var(--card-border-hover);
+  box-shadow:
+    var(--shadow-card),
+    var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.35rem 1.75rem;
+  cursor: pointer;
+  user-select: none;
+  background: transparent;
+  transition: background-color var(--transition-fast);
+  position: relative;
+  gap: 1rem;
+}
+
+.card-header:hover,
+.card-header:focus-visible {
+  background: var(--header-bg);
+  outline: none;
+}
+
+.card-header:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--emerald-glow);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* Header left gradient accent */
+.card-header::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--emerald-primary), var(--gold-accent));
+  border-radius: 0 3px 3px 0;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+.reading-card:hover .card-header::before {
+  opacity: 1;
+}
+
+.item-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--emerald-deep);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+.expand-indicator {
+  font-size: 1rem;
+  color: var(--emerald-primary);
+  transition: transform var(--transition-bounce);
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--emerald-light);
+  border: 2px solid #34d399;
+  font-weight: 700;
+}
+
+/* Rotate when expanded - change ▼ to rotate 180deg like standard accordion */
+.reading-card:not(.collapsed) .expand-indicator {
+  transform: rotate(180deg);
+  background: #a7f3d0;
+  border-color: var(--emerald-primary);
+  box-shadow: 0 0 12px var(--emerald-glow);
+  color: #047857;
+}
+
+/* Card Body */
+.card-body {
+  max-height: 3000px;
+  opacity: 1;
+  padding: 0 1.75rem 1.75rem;
+  transition:
+    max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease,
+    padding 0.35s ease;
+  overflow: hidden;
+}
+
+.reading-card.collapsed .card-body {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   7. Arabic Text Section
+   -------------------------------------------------------------------------- */
+.arabic-section {
+  background: var(--arabic-bg);
+  border: 1px solid var(--arabic-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+  text-align: right;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Arabic glow decoration */
+.arabic-section::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 70% 30%,
+    rgba(5, 150, 105, 0.04) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.arabic-section::after {
+  content: "﷽";
+  position: absolute;
+  bottom: 0.5rem;
+  left: 1rem;
+  font-family: var(--font-arabic);
+  font-size: 1.5rem;
+  color: rgba(5, 150, 105, 0.08);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.arabic-text {
+  font-family: var(--font-arabic);
+  font-size: 22px;
+  line-height: 2.1;
+  color: #065f46;
+  direction: rtl;
+  word-spacing: 3px;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   8. Bengali Text Sections - Brighter & Bolder
+   -------------------------------------------------------------------------- */
+.bengali-section {
+  margin-bottom: 1.1rem;
+}
+
+.bengali-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--emerald-primary);
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section-label::before {
+  content: "◆";
+  font-size: 0.6rem;
+  color: var(--gold-accent);
+}
+
+.bengali-text {
+  font-family: var(--font-bengali);
+  font-size: 18px;
+  line-height: 1.85;
+  color: #0f172a;
+  font-weight: 500;
+  background: var(--bengali-pron-bg);
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--emerald-primary);
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.bengali-text:hover {
+  border-left-width: 4px;
+  background: #f1f5f9;
+}
+
+.bengali-text.meaning {
+  border-left-color: var(--gold-accent);
+  background: var(--bengali-mean-bg);
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.bengali-text.meaning:hover {
+  border-left-color: var(--gold-accent);
+  background: #fef3c7;
+}
+
+/* --------------------------------------------------------------------------
+   9. Scroll to Top Button
+   -------------------------------------------------------------------------- */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--emerald-primary), var(--emerald-deep));
+  color: #ffffff;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(5, 150, 105, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 900;
+  opacity: 1;
+  transition:
+    transform var(--transition-bounce),
+    opacity var(--transition-smooth),
+    box-shadow var(--transition-fast);
+}
+
+.scroll-top-btn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 28px rgba(5, 150, 105, 0.5);
+}
+
+.scroll-top-btn:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.scroll-top-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+/* --------------------------------------------------------------------------
+   10. Responsive Design
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .reading-container {
+    padding: 2rem 1rem 4rem;
+  }
+
+  .top-title-section {
+    padding: 1.5rem 0.5rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .top-title-section::before {
+    width: 140px;
+    height: 140px;
+    top: -10px;
+  }
+
+  .moon-symbol {
+    font-size: 2.6rem;
+  }
+
+  .title-bn {
+    font-size: 1.7rem;
+  }
+
+  .title-en {
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+  }
+
+  .subtitle {
+    font-size: 0.88rem;
+  }
+
+  .card-header {
+    padding: 1.1rem 1.25rem;
+  }
+
+  .card-header::before {
+    top: 15%;
+    height: 70%;
+  }
+
+  .item-title {
+    font-size: 1.05rem;
+  }
+
+  .expand-indicator {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .card-body {
+    padding: 0 1.25rem 1.25rem;
+  }
+
+  .arabic-section {
+    padding: 1rem 1.15rem;
+  }
+
+  .arabic-section::after {
+    font-size: 1.2rem;
+    bottom: 0.3rem;
+    left: 0.75rem;
+  }
+
+  .arabic-text {
+    font-size: 20px;
+    line-height: 2;
+    word-spacing: 2px;
+  }
+
+  .bengali-text {
+    font-size: 17px;
+    line-height: 1.8;
+    padding: 0.8rem 1rem;
+  }
+
+  .scroll-top-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 42px;
+    height: 42px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .reading-container {
+    padding: 1.5rem 0.75rem 3.5rem;
+  }
+
+  .title-bn {
+    font-size: 1.45rem;
+  }
+
+  .title-en {
+    font-size: 0.85rem;
+  }
+
+  .subtitle {
+    font-size: 0.82rem;
+  }
+
+  .card-header {
+    padding: 0.9rem 1rem;
+  }
+
+  .item-title {
+    font-size: 0.95rem;
+  }
+
+  .card-body {
+    padding: 0 1rem 1rem;
+  }
+
+  .arabic-section {
+    padding: 0.85rem 0.9rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .arabic-text {
+    font-size: 18px;
+    line-height: 1.9;
+  }
+
+  .bengali-text {
+    font-size: 16px;
+    line-height: 1.75;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .section-label {
+    font-size: 0.82rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11. Reduced Motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
