@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f0fdf4" />
+    <title>অফলাইন | ঘুমানোর পূর্বের সূরা ও দোয়া</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!--
+      Standalone offline fallback (PWA Phase 2).
+      Styles are INLINE on purpose: this page must render even when the
+      Next.js CSS bundle is unavailable offline. Palette mirrors
+      app/globals.css exactly (no new colors).
+    -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        min-height: 100%;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 24px;
+        background: linear-gradient(145deg, #f0fdf4, #ecfdf5);
+        font-family: "Noto Serif Bengali", "Hind Siliguri", serif;
+        color: #0f172a;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      .offline-card {
+        width: 100%;
+        max-width: 440px;
+        text-align: center;
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 24px;
+        padding: 40px 28px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      }
+      .offline-logo {
+        display: block;
+        width: 84px;
+        height: 84px;
+        margin: 0 auto 20px;
+        border-radius: 22%;
+        object-fit: contain;
+      }
+      .offline-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.5;
+        color: #047857;
+        margin-bottom: 12px;
+      }
+      .offline-text {
+        font-size: 1.05rem;
+        line-height: 1.9;
+        color: #475569;
+        margin-bottom: 8px;
+      }
+      .offline-note {
+        font-size: 0.95rem;
+        line-height: 1.8;
+        color: #475569;
+        margin-top: 18px;
+      }
+      .offline-badge {
+        display: inline-block;
+        margin-top: 24px;
+        padding: 10px 22px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #ffffff;
+        background: #059669;
+        border-radius: 999px;
+        text-decoration: none;
+      }
+      .offline-badge:hover {
+        background: #047857;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="offline-card">
+      <img
+        class="offline-logo"
+        src="icons/icon-192.png"
+        alt="ঘুমানোর পূর্বের সূরা ও দোয়া লোগো"
+        width="84"
+        height="84"
+      />
+      <h1 class="offline-title">আপনি এখন অফলাইনে আছেন</h1>
+      <p class="offline-text">
+        ইন্টারনেট সংযোগ খুঁজে পাওয়া যায়নি।
+      </p>
+      <p class="offline-note">
+        একবার ভিজিট করা সূরা ও দোয়াগুলো ইন্টারনেট ছাড়াই পড়া যাবে। সংযোগ ফিরে
+        এলে নতুন কিছু যুক্ত হলে তা স্বয়ংক্রিয়ভাবে হালনাগাদ হবে।
+      </p>
+      <a class="offline-badge" href="/">আবার চেষ্টা করুন</a>
+    </main>
+  </body>
+</html>

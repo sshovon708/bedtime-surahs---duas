@@ -1,44 +1,47 @@
+@import "tailwindcss";
+
 /* ==========================================================================
    Bedtime Surahs & Duas - Premium UI/UX Design (Light Mode)
+   Migrated from style.css — visual parity preserved.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
    1. Theme Variables - Clean Light Mode Palette
    -------------------------------------------------------------------------- */
-:root {
+@theme {
   /* Background & Surface */
-  --bg-gradient-start: #f0fdf4;
-  --bg-gradient-end: #ecfdf5;
-  --card-bg: #ffffff;
-  --card-bg-hover: #f8fafc;
-  --header-bg: #f1f5f9;
-  --card-border: #d1d5db;
-  --card-border-hover: #34d399;
+  --color-bg-gradient-start: #f0fdf4;
+  --color-bg-gradient-end: #ecfdf5;
+  --color-card-bg: #ffffff;
+  --color-card-bg-hover: #f8fafc;
+  --color-header-bg: #f1f5f9;
+  --color-card-border: #d1d5db;
+  --color-card-border-hover: #34d399;
 
   /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.9);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --color-glass-bg: rgba(255, 255, 255, 0.8);
+  --color-glass-border: rgba(255, 255, 255, 0.9);
+  --color-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 
-  /* Text Colors - Brighter & Bolder */
-  --text-primary: #0f172a;
-  --text-secondary: #1e293b;
-  --text-muted: #475569;
-  --text-gold: #b45309;
+  /* Text Colors */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #1e293b;
+  --color-text-muted: #475569;
+  --color-text-gold: #b45309;
 
   /* Accent Colors */
-  --emerald-primary: #059669;
-  --emerald-deep: #047857;
-  --emerald-light: #d1fae5;
-  --emerald-glow: rgba(5, 150, 105, 0.15);
-  --gold-accent: #d97706;
-  --gold-glow: rgba(217, 119, 6, 0.15);
+  --color-emerald-primary: #059669;
+  --color-emerald-deep: #047857;
+  --color-emerald-light: #d1fae5;
+  --color-emerald-glow: rgba(5, 150, 105, 0.15);
+  --color-gold-accent: #d97706;
+  --color-gold-glow: rgba(217, 119, 6, 0.15);
 
   /* Section Backgrounds */
-  --arabic-bg: #f0fdf4;
-  --arabic-border: #a7f3d0;
-  --bengali-pron-bg: #f8fafc;
-  --bengali-mean-bg: #fffbeb;
+  --color-arabic-bg: #f0fdf4;
+  --color-arabic-border: #a7f3d0;
+  --color-bengali-pron-bg: #f8fafc;
+  --color-bengali-mean-bg: #fffbeb;
 
   /* Fonts */
   --font-arabic: "Amiri", "Noto Naskh Arabic", serif;
@@ -78,12 +81,12 @@ html {
 body {
   background: linear-gradient(
     145deg,
-    var(--bg-gradient-start) 0%,
-    var(--bg-gradient-end) 50%,
+    var(--color-bg-gradient-start) 0%,
+    var(--color-bg-gradient-end) 50%,
     #f8fafc 100%
   );
   background-attachment: fixed;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   font-family: var(--font-bengali);
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
@@ -140,15 +143,15 @@ body::before {
   width: 0%;
   background: linear-gradient(
     90deg,
-    var(--emerald-primary),
-    var(--gold-accent),
-    var(--emerald-primary)
+    var(--color-emerald-primary),
+    var(--color-gold-accent),
+    var(--color-emerald-primary)
   );
   background-size: 200% 100%;
   animation: shimmer 3s ease-in-out infinite;
   transition: width 0.15s ease-out;
   border-radius: 0 3px 3px 0;
-  box-shadow: 0 0 12px var(--emerald-glow);
+  box-shadow: 0 0 12px var(--color-emerald-glow);
 }
 
 @keyframes shimmer {
@@ -200,37 +203,48 @@ body::before {
   filter: drop-shadow(0 0 20px rgba(217, 119, 6, 0.2));
 }
 
+/* Brand logo shown in the hero (replaces the old emoji placeholder). The float
+   animation + glow live on the .moon-symbol wrapper, so they still apply. */
+.hero-logo {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: 22%;
+  object-fit: contain;
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
 
 .title-bn {
-  font-size: 2.2rem;
+  font-size: 2.35rem;
   font-weight: 700;
-  color: var(--emerald-deep);
-  margin-bottom: 0.35rem;
+  color: var(--color-emerald-deep);
+  margin-bottom: 0.4rem;
   text-shadow: 0 2px 20px rgba(5, 150, 105, 0.12);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
 }
 
 .title-en {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--text-gold);
-  margin-bottom: 0.85rem;
-  letter-spacing: 0.08em;
+  color: var(--color-text-gold);
+  margin-bottom: 1rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   font-family: var(--font-bengali);
 }
 
 .subtitle {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  max-width: 600px;
+  font-size: 1.02rem;
+  color: var(--color-text-muted);
+  max-width: 560px;
   margin: 0 auto;
   font-style: italic;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 /* Decorative divider */
@@ -238,7 +252,7 @@ body::before {
   content: "✦ ✦ ✦";
   display: block;
   margin-top: 1.5rem;
-  color: var(--emerald-primary);
+  color: var(--color-emerald-primary);
   font-size: 0.85rem;
   letter-spacing: 0.5em;
   opacity: 0.5;
@@ -250,12 +264,12 @@ body::before {
 .reading-list {
   display: flex;
   flex-direction: column;
-  gap: 1.35rem;
+  gap: 1.5rem;
 }
 
 .reading-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   overflow: hidden;
@@ -266,7 +280,7 @@ body::before {
 }
 
 .reading-card:hover {
-  border-color: var(--card-border-hover);
+  border-color: var(--color-card-border-hover);
   box-shadow:
     var(--shadow-card),
     var(--shadow-glow);
@@ -289,12 +303,12 @@ body::before {
 
 .card-header:hover,
 .card-header:focus-visible {
-  background: var(--header-bg);
+  background: var(--color-header-bg);
   outline: none;
 }
 
 .card-header:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--emerald-glow);
+  box-shadow: inset 0 0 0 2px var(--color-emerald-primary);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
@@ -306,7 +320,7 @@ body::before {
   top: 20%;
   height: 60%;
   width: 3px;
-  background: linear-gradient(to bottom, var(--emerald-primary), var(--gold-accent));
+  background: linear-gradient(to bottom, var(--color-emerald-primary), var(--color-gold-accent));
   border-radius: 0 3px 3px 0;
   opacity: 0.6;
   transition: opacity var(--transition-fast);
@@ -317,47 +331,67 @@ body::before {
 }
 
 .item-title {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--emerald-deep);
-  line-height: 1.5;
-  letter-spacing: 0.01em;
+  color: var(--color-emerald-deep);
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .expand-indicator {
-  font-size: 1rem;
-  color: var(--emerald-primary);
-  transition: transform var(--transition-bounce);
+  color: var(--color-emerald-primary);
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: var(--emerald-light);
+  background: var(--color-emerald-light);
   border: 2px solid #34d399;
-  font-weight: 700;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-/* Rotate when expanded - change ▼ to rotate 180deg like standard accordion */
-.reading-card:not(.collapsed) .expand-indicator {
+/* Chevron icon: sized via CSS so media queries can scale it responsively. */
+.expand-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--transition-bounce);
+}
+
+/* The chevron rotates 180deg when expanded (points up = "collapse"). Rotating
+   only the icon — not the whole badge — keeps the motion calm and precise. */
+.reading-card:not(.collapsed) .expand-icon {
   transform: rotate(180deg);
+}
+
+.reading-card:not(.collapsed) .expand-indicator {
   background: #a7f3d0;
-  border-color: var(--emerald-primary);
-  box-shadow: 0 0 12px var(--emerald-glow);
+  border-color: var(--color-emerald-primary);
+  box-shadow: 0 0 12px var(--color-emerald-glow);
   color: #047857;
+}
+
+/* Subtle badge emphasis while interacting with the header. */
+.card-header:hover .expand-indicator,
+.card-header:focus-visible .expand-indicator {
+  border-color: var(--color-emerald-primary);
 }
 
 /* Card Body */
 .card-body {
-  max-height: 3000px;
+  max-height: 2200px;
   opacity: 1;
   padding: 0 1.75rem 1.75rem;
   transition:
-    max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.35s ease,
-    padding 0.35s ease;
+    max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease 0.05s,
+    padding 0.3s ease;
   overflow: hidden;
 }
 
@@ -373,12 +407,12 @@ body::before {
    7. Arabic Text Section
    -------------------------------------------------------------------------- */
 .arabic-section {
-  background: var(--arabic-bg);
-  border: 1px solid var(--arabic-border);
+  background: var(--color-arabic-bg);
+  border: 1px solid var(--color-arabic-border);
   border-radius: var(--radius-md);
-  padding: 1.25rem 1.5rem;
+  padding: 1.6rem 1.6rem 1.75rem;
   margin-top: 0.5rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   text-align: right;
   position: relative;
   overflow: hidden;
@@ -414,21 +448,22 @@ body::before {
 
 .arabic-text {
   font-family: var(--font-arabic);
-  font-size: 22px;
-  line-height: 2.1;
+  font-size: 25px;
+  line-height: 2.25;
   color: #065f46;
   direction: rtl;
   word-spacing: 3px;
   font-weight: 600;
   position: relative;
   z-index: 1;
+  overflow-wrap: break-word;
 }
 
 /* --------------------------------------------------------------------------
-   8. Bengali Text Sections - Brighter & Bolder
+   8. Bengali Text Sections
    -------------------------------------------------------------------------- */
 .bengali-section {
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.35rem;
 }
 
 .bengali-section:last-child {
@@ -436,33 +471,34 @@ body::before {
 }
 
 .section-label {
-  font-size: 0.88rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  color: var(--emerald-primary);
-  margin-bottom: 0.4rem;
+  color: var(--color-emerald-primary);
+  margin-bottom: 0.55rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .section-label::before {
   content: "◆";
   font-size: 0.6rem;
-  color: var(--gold-accent);
+  color: var(--color-gold-accent);
 }
 
 .bengali-text {
   font-family: var(--font-bengali);
   font-size: 18px;
-  line-height: 1.85;
+  line-height: 1.9;
   color: #0f172a;
   font-weight: 500;
-  background: var(--bengali-pron-bg);
-  padding: 0.9rem 1.2rem;
+  background: var(--color-bengali-pron-bg);
+  padding: 1rem 1.3rem;
   border-radius: var(--radius-sm);
-  border-left: 3px solid var(--emerald-primary);
+  border-left: 3px solid var(--color-emerald-primary);
+  overflow-wrap: break-word;
   transition:
     border-color var(--transition-fast),
     background var(--transition-fast);
@@ -473,15 +509,19 @@ body::before {
   background: #f1f5f9;
 }
 
+/* Meaning is the primary reading content — give it a touch more presence than
+   the transliteration above it for a clearer visual hierarchy. */
 .bengali-text.meaning {
-  border-left-color: var(--gold-accent);
-  background: var(--bengali-mean-bg);
+  border-left-color: var(--color-gold-accent);
+  background: var(--color-bengali-mean-bg);
   color: #1e293b;
   font-weight: 500;
+  font-size: 18.5px;
+  line-height: 1.95;
 }
 
 .bengali-text.meaning:hover {
-  border-left-color: var(--gold-accent);
+  border-left-color: var(--color-gold-accent);
   background: #fef3c7;
 }
 
@@ -495,11 +535,9 @@ body::before {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--emerald-primary), var(--emerald-deep));
+  background: linear-gradient(135deg, var(--color-emerald-primary), var(--color-emerald-deep));
   color: #ffffff;
   border: none;
-  font-size: 1.3rem;
-  font-weight: bold;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(5, 150, 105, 0.3);
   display: flex;
@@ -520,6 +558,16 @@ body::before {
 
 .scroll-top-btn:active {
   transform: translateY(-1px) scale(0.98);
+}
+
+/* Clearly visible keyboard focus ring (white gap + emerald ring — both already
+   part of the palette). */
+.scroll-top-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 4px 20px rgba(5, 150, 105, 0.3),
+    0 0 0 3px #ffffff,
+    0 0 0 5px var(--color-emerald-primary);
 }
 
 .scroll-top-btn.hidden {
@@ -551,6 +599,11 @@ body::before {
     font-size: 2.6rem;
   }
 
+  .hero-logo {
+    width: 78px;
+    height: 78px;
+  }
+
   .title-bn {
     font-size: 1.7rem;
   }
@@ -578,9 +631,13 @@ body::before {
   }
 
   .expand-indicator {
-    width: 24px;
-    height: 24px;
-    font-size: 0.7rem;
+    width: 30px;
+    height: 30px;
+  }
+
+  .expand-icon {
+    width: 18px;
+    height: 18px;
   }
 
   .card-body {
@@ -612,9 +669,8 @@ body::before {
   .scroll-top-btn {
     bottom: 1.5rem;
     right: 1.5rem;
-    width: 42px;
-    height: 42px;
-    font-size: 1.1rem;
+    width: 44px;
+    height: 44px;
   }
 }
 
@@ -640,7 +696,7 @@ body::before {
   }
 
   .item-title {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
   }
 
   .card-body {
