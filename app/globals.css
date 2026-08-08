@@ -740,3 +740,53 @@ body::before {
     scroll-behavior: auto;
   }
 }
+
+/* --------------------------------------------------------------------------
+   12. PWA Install Prompt (subtle, self-hiding)
+   Only rendered when the browser offers an install prompt and the app isn't
+   already installed — otherwise the component returns null and this section is
+   unused. Colors reuse the existing emerald palette (no new colors).
+   -------------------------------------------------------------------------- */
+.install-prompt {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 2.25rem;
+}
+
+.install-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.3rem;
+  font-family: var(--font-bengali);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-emerald-deep);
+  background: var(--color-card-bg);
+  border: 1.5px solid var(--color-emerald-primary);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.install-btn:hover {
+  background: var(--color-emerald-primary);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.install-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.install-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px #ffffff,
+    0 0 0 5px var(--color-emerald-primary);
+}

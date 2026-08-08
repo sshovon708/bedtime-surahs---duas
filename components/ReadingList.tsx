@@ -7,11 +7,11 @@ import ReadingCard from "./ReadingCard";
 /**
  * Renders the full list of reading cards from the typed data source and owns
  * the accordion open/close state (persisted to localStorage via useCardStates).
- * Each card toggles independently — multiple cards may stay open at once,
- * matching the original script.js behavior.
+ * Single-open accordion: at most one card is expanded at a time — opening one
+ * card collapses whichever card was previously open.
  */
 export default function ReadingList() {
-  const { cardStates, toggleCard } = useCardStates();
+  const { activeCard, toggleCard } = useCardStates();
 
   return (
     <div className="reading-list">
@@ -19,7 +19,7 @@ export default function ReadingList() {
         <ReadingCard
           key={item.id}
           item={item}
-          expanded={!!cardStates[item.id]}
+          expanded={activeCard === item.id}
           onToggle={() => toggleCard(item.id)}
         />
       ))}

@@ -13,10 +13,12 @@ interface ReadingCardProps {
 }
 
 /**
- * A single collapsible reading card. Interactivity mirrors the original
- * script.js:
- *  - Clicking the header toggles this card independently (multiple cards may
- *    stay open at once — state is owned by the parent list).
+ * A single collapsible reading card. It is a controlled/presentational
+ * component: whether it is open is driven by the `expanded` prop and all state
+ * is owned by the parent list (single-open accordion — at most one card is
+ * expanded at a time).
+ *  - Clicking the header calls `onToggle`; the parent opens this card and
+ *    collapses whichever card was previously open.
  *  - Enter and Space toggle when the header is focused; Space calls
  *    preventDefault() to stop the page from scrolling.
  *  - The `collapsed` class drives the CSS open/close animation, and
