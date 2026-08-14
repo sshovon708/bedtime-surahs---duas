@@ -552,7 +552,9 @@ body::before {
     padding: 1.1rem 1.25rem;
   }
 
-  .card-header::before {
+  /* The left gradient accent bar (rendered by .reading-card::before) is
+     shortened on small screens so it doesn't dominate the card. */
+  .reading-card::before {
     top: 15%;
     height: 70%;
   }

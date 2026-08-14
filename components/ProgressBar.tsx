@@ -11,7 +11,14 @@ export default function ProgressBar() {
   const progress = useScrollProgress();
 
   return (
-    <div id="progress-container">
+    <div
+      id="progress-container"
+      role="progressbar"
+      aria-label="পড়ার অগ্রগতি"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(progress)}
+    >
       <div id="progress-bar" style={{ width: `${progress}%` }}></div>
     </div>
   );

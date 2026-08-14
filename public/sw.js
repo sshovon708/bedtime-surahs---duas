@@ -17,8 +17,8 @@
  *     work offline after first visit without blocking updates.
  *   - On activate, delete only caches owned by THIS SW whose version is stale.
  *
- * No push, no background sync, no IndexedDB. LocalStorage (bedtime_card_states)
- * is untouched — it lives in the page, not here.
+ * No push, no background sync, no IndexedDB, no localStorage — the app is a
+ * static reader with no client-side persistence.
  */
 
 // Bump CACHE_VERSION to roll all caches on the next deploy.
@@ -128,7 +128,9 @@ async function staleWhileRevalidate(request, cacheName) {
       return response;
     })
     .catch(() => undefined);
-  return cached || (await networkPromise);
+  // If both the cache and the network fail, return a 504-style fallback so
+  // respondWith() never receives undefined (which would throw a TypeError).
+  return cached || (await networkPromise) || Response.error();
 }
 
 // Network-first for navigations, with layered offline fallbacks.
@@ -137,7 +139,7 @@ async function handleNavigation(event) {
   try {
     // Prefer a navigation-preload response if available.
     const preload = await event.preloadResponse;
-    if (preload) {
+    if (preload && preload.ok) {
       cache.put(event.request, preload.clone());
       return preload;
     }

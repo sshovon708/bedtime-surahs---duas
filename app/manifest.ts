@@ -12,6 +12,7 @@ import type { MetadataRoute } from "next";
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
+    id: "/",
     name: "ঘুমানোর পূর্বের সূরা ও দোয়া | Bedtime Surahs & Duas",
     short_name: "ঘুমানোর সূরা ও দোয়া",
     description:
@@ -19,6 +20,7 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     scope: "/",
     display: "standalone",
+    display_override: ["standalone", "minimal-ui"],
     lang: "bn",
     dir: "ltr",
     // From --color-bg-gradient-start (#f0fdf4): matches the existing light UI so

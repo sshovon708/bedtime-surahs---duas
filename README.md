@@ -3,9 +3,9 @@
 A lightweight, installable **Progressive Web App (PWA)** presenting 10 short
 Surahs and Duas for recitation before sleep. Each item shows the **Arabic**
 text alongside its **Bengali transliteration (উচ্চারণ)** and **Bengali meaning
-(অর্থ)**, in collapsible cards optimized for readability on mobile and desktop.
-The app works offline after the first visit and can be installed to the home
-screen.
+(অর্থ)**, in always-expanded cards optimized for readability on mobile and
+desktop. The app works offline after the first visit and can be installed to
+the home screen.
 
 > The religious content is fixed and presented verbatim. This project is a
 > reader — it has **no accounts, database, backend, or tracking**.
@@ -39,7 +39,7 @@ screen.
 **Bedtime Surahs & Duas** (ঘুমানোর পূর্বের সূরা ও দোয়া) is a single-page,
 installable Progressive Web App that presents **10 short Islamic Surahs and
 Duas** for nightly recitation before sleep. Each item is displayed in three
-forms inside a collapsible card:
+forms inside an always-expanded card:
 
 1. **Arabic** text (right-to-left)
 2. **Bengali transliteration** (উচ্চারণ — pronunciation)
@@ -79,9 +79,7 @@ PWA install path (manifest + InstallButton + usePwaInstall)
 | Arabic text (RTL) | Verbatim Arabic rendering | `ReadingCard.tsx` |
 | Bengali transliteration (উচ্চারণ) | Pronunciation guide | `ReadingCard.tsx` |
 | Bengali meaning (অর্থ) | Translation | `ReadingCard.tsx` |
-| Single-open accordion | At most one card expanded at a time | `hooks/useCardStates.ts` |
-| Accordion persistence | Remembers the open card across visits | `localStorage["bedtime_card_states"]` |
-| Keyboard + ARIA support | Accessible accordion controls | `ReadingCard.tsx` |
+| Always-expanded cards | All content visible without interaction | `ReadingCard.tsx` |
 
 ### UX / Scroll Features
 
@@ -128,7 +126,7 @@ PWA install path (manifest + InstallButton + usePwaInstall)
 
 | Library | Version | Purpose |
 |---|---|---|
-| **lucide-react** | `^1.30.0` | Tree-shaken icons: `ChevronDown` (card indicator), `ArrowUp` (back-to-top), `Download` (install button) |
+| **lucide-react** | `^1.30.0` | Tree-shaken icons: `ArrowUp` (back-to-top), `Download` (install button) |
 | **@tailwindcss/postcss** | `^4.0.0` (dev) | PostCSS plugin processing Tailwind 4 |
 
 ### Development Tooling
@@ -149,7 +147,7 @@ PWA install path (manifest + InstallButton + usePwaInstall)
 - No backend framework (Express, Fastify, etc.)
 - No database or ORM (Prisma, mongoose, pg, etc.)
 - No authentication (next-auth, JWT, OAuth, etc.)
-- No state-management library (React built-ins + `localStorage` only)
+- No state-management library (React built-ins only)
 - No test framework (Jest, Vitest, Playwright, etc.)
 - No PWA packages (`next-pwa`, Workbox) — the SW is hand-written
 - No HTTP client (no axios — the SW uses `fetch` only)
@@ -179,12 +177,11 @@ bedtime-surahs---duas/
 │   ├── HeroSection.tsx                 # Logo + Bengali/English titles + subtitle
 │   ├── InstallButton.tsx               # Self-hiding PWA install button
 │   ├── ProgressBar.tsx                 # Scroll reading-progress indicator
-│   ├── ReadingCard.tsx                 # Single collapsible card (presentational)
-│   ├── ReadingList.tsx                 # Accordion list; owns open/close state
+│   ├── ReadingCard.tsx                 # Single always-expanded card (presentational)
+│   ├── ReadingList.tsx                 # Renders the full list of reading cards
 │   ├── ScrollToTopButton.tsx           # Back-to-top floating button
 │   └── ServiceWorkerRegistrar.tsx      # Registers /sw.js (production, browser only)
-├── hooks/                              # Custom React hooks (4)
-│   ├── useCardStates.ts                # Single-open accordion + localStorage
+├── hooks/                              # Custom React hooks (3)
 │   ├── usePwaInstall.ts                # beforeinstallprompt capture + standalone
 │   ├── useScrollProgress.ts            # Reading progress 0–100% (scroll-based)
 │   └── useScrollToTop.ts               # Back-to-top visibility + smooth scroll
@@ -210,7 +207,7 @@ bedtime-surahs---duas/
 |---|---|---|
 | `app/` | Next.js App Router root — entry points | `layout.tsx`, `page.tsx`, `manifest.ts`, `globals.css` |
 | `components/` | UI (small, focused pieces) | 7 components |
-| `hooks/` | Reusable client-side logic | 4 hooks |
+| `hooks/` | Reusable client-side logic | 3 hooks |
 | `lib/` | Typed reading content + contracts | `cards.ts`, `types.ts` |
 | `public/` | Static assets served as-is | `sw.js`, `offline.html`, icons, favicons |
 
@@ -257,20 +254,15 @@ renders:
 
 1. User opens the site → Next.js server renders `app/page.tsx` → HTML sent to browser.
 2. `ReadingList.tsx` reads the static `readingItems` array from `lib/cards.ts`.
-3. `ReadingList` renders one `ReadingCard` per item; expansion is driven by the
-   `expanded` prop from the `useCardStates` hook.
-4. Clicking a card header calls `toggleCard(id)` → `useCardStates` updates
-   `activeCard` → the previously open card collapses (single-open accordion).
-5. State is persisted to `localStorage` under key **`bedtime_card_states`**.
-6. On return visits, the saved card is restored **after hydration**
-   (hydration-safe; server renders all collapsed).
+3. `ReadingList` renders one `ReadingCard` per item; every card is always fully
+   expanded so all Arabic, transliteration, and meaning content is visible
+   without interaction.
 
 ### Dependency Direction (no circular dependencies)
 
 ```
-lib/types.ts  ←  lib/cards.ts  ←  hooks/useCardStates.ts
+lib/types.ts  ←  lib/cards.ts
 components/ReadingList.tsx  →  components/ReadingCard.tsx  ←  lib/types.ts
-components/ReadingList.tsx  →  hooks/useCardStates.ts
 components/ProgressBar.tsx  →  hooks/useScrollProgress.ts
 components/ScrollToTopButton.tsx → hooks/useScrollToTop.ts
 components/InstallButton.tsx → hooks/usePwaInstall.ts
@@ -286,8 +278,7 @@ GET / → Next.js SSR (layout.tsx → page.tsx) → HTML+CSS/JS sent →
     useEffect: ServiceWorkerRegistrar registers /sw.js (after window.load, production only) →
       SW installs: precaches app shell (offline.html, /, manifest, icons) →
       SW activates: cleans stale caches, enables navigation preload, claims clients →
-  DOM rendered: progress bar (0%), hero, collapsed cards, hidden scroll-top button →
-  useCardStates restores last-open card from localStorage →
+  DOM rendered: progress bar (0%), hero, always-expanded cards, hidden scroll-top button →
   usePwaInstall captures beforeinstallprompt (Chromium) / detects standalone
 ```
 
@@ -379,14 +370,9 @@ Everyday content edits (e.g. in `lib/cards.ts`) do **not** require a version bum
 
 ### LocalStorage
 
-- **Key:** `bedtime_card_states` — the single-open accordion state.
-- The accordion is **single-open**: at most one card is expanded at a time.
-- State restore is **hydration-safe** (server renders all collapsed; the saved
-  card is applied after mount) and **defensive**: missing data, invalid JSON, or
-  unexpected shapes are ignored safely, and **legacy multi-open data is
-  normalized** to the first previously-open card. All access is wrapped in
-  `try/catch`, so private/restricted storage never crashes the app.
-- No IndexedDB, cookies, or server storage are used.
+The app does **not** use `localStorage`, IndexedDB, cookies, or any other
+client-side persistence — all content is static and always visible, so there is
+nothing to remember between visits.
 
 ### Browser-Limitation Notes
 
@@ -454,21 +440,21 @@ open http://localhost:3000.
 3. Toggle **Network → Offline** (or DevTools → Application → *Offline*).
 4. Reload: previously visited content still renders; an unreachable navigation
    falls back to the cached start page or `offline.html`.
-5. Open/close cards and refresh — the single expanded card is restored from
-   `localStorage`, offline included.
+5. All cards are always expanded, so the full reading content is available
+   offline after the first visit.
 
 > There are **no automated tests** in this project (no Jest/Vitest/Playwright).
 > The procedures above are the documented manual testing methodology. The most
-> behaviorally rich logic (`useCardStates` legacy-data normalization, and the SW
-> caching strategies) is currently covered only by manual verification.
+> behaviorally rich logic (the SW caching strategies) is currently covered only
+> by manual verification.
 
 ---
 
 ## 9. Accessibility & UX
 
-- Card headers use `role="button"`, `tabindex="0"`, and `aria-expanded` that
-  reflects real state; toggle with **Enter** or **Space**.
-- Reading progress bar and a back-to-top button (appears after ~350px).
+- Reading progress bar exposes `role="progressbar"` with `aria-valuenow` so
+  screen readers announce reading progress.
+- Back-to-top button (appears after ~350px) has a Bengali `aria-label`/`title`.
 - Respects `prefers-reduced-motion` (animations/transitions reduced; `scroll-behavior: auto`).
 - **Language/script:** `<html lang="bn" dir="ltr">`; Arabic paragraphs explicitly
   set `dir="rtl"`.
@@ -507,13 +493,11 @@ The app degrades gracefully — the error path never crashes the app.
 
 | Layer | Mechanism | Files |
 |---|---|---|
-| `localStorage` access | `try/catch` with `console.warn` | `hooks/useCardStates.ts` |
 | SW precache | Per-URL `try/catch` — missing optional assets don't abort install | `public/sw.js` |
 | SW navigation fallback | Multi-layered: exact page → start URL → offline.html → `Response.error()` | `public/sw.js` |
 | SW activation | Obsolete cache cleanup via `Promise.all`; `navigationPreload` in try/catch | `public/sw.js` |
 | PWA install prompt | `try/catch/finally` around the native prompt; dismissals handled | `hooks/usePwaInstall.ts` |
 | SW registration | `.catch()` — failure silently ignored | `ServiceWorkerRegistrar.tsx` |
-| Parsing stored state | Invalid JSON → `null`; unknown shapes → `null` (safe) | `hooks/useCardStates.ts` |
 
 **Not present:** no global error boundary (`error.tsx` / `ErrorBoundary`), no
 React error boundary in the tree, no error-reporting service, no structured
@@ -549,9 +533,6 @@ is scoped and does not exfiltrate data.
 - Google Fonts is a third-party dependency on the critical path. Migrating to
   `next/font` for self-hosting (already flagged in a `layout.tsx` comment) would
   remove the external dependency and improve performance.
-- `tsconfig.json` has `"allowJs": true`, which weakens type-safety enforcement;
-  it can be removed since the only plain-JS file is the intentionally-outside-TS
-  SW (`public/sw.js`).
 
 ---
 
@@ -561,7 +542,7 @@ The app is highly performant by construction:
 
 | Aspect | Status | Notes |
 |---|---|---|
-| Bundle size | Minimal — 4 runtime deps; `lucide-react` icons are tree-shaken (only 3 used) | `package.json` |
+| Bundle size | Minimal — 4 runtime deps; `lucide-react` icons are tree-shaken (only 2 used) | `package.json` |
 | Network requests | 1 HTML page + CSS/JS chunks + font families + a few small icons | Static app |
 | SSR | Content is server-rendered; no client data-fetching waterfall | `app/page.tsx` is a Server Component |
 | Scroll rendering | `requestAnimationFrame` coalescing + passive listeners prevent layout-thrash | `useScrollProgress.ts`, `useScrollToTop.ts` |
@@ -586,16 +567,16 @@ The app is highly performant by construction:
 
 - **Organization:** clean separation — `app/` (pages), `components/` (UI),
   `hooks/` (logic), `lib/` (data).
-- **Naming:** consistent and descriptive (`ReadingCard`, `useCardStates`,
-  `handleNavigation`, `pickActiveFromStored`).
+- **Naming:** consistent and descriptive (`ReadingCard`, `useScrollProgress`,
+  `handleNavigation`).
 - **Documentation:** extensive comments in nearly every file explaining *why*
   decisions were made; this README doubles as an operations manual.
 - **Type safety:** strict TypeScript, typed data source, typed component props.
 - **Separation of concerns:** presentational components don't touch state logic;
   hooks own side effects; data is isolated in `lib/`.
 - **Coupling:** very low — one-way dependencies; no circular imports.
-- **Error handling:** thoughtful — defensive parsing everywhere state is read;
-  graceful degradation throughout.
+- **Error handling:** thoughtful — graceful degradation throughout (SW
+  fallbacks, install-prompt try/catch, registration fail-safe).
 - **Accessibility:** above average for a static reader — full keyboard + ARIA,
   reduced-motion, focus states, RTL/LTR handling.
 
@@ -605,10 +586,8 @@ The app is highly performant by construction:
 
 ### 1. (Medium) No automated tests
 
-The accordion persistence logic (`useCardStates` — legacy-data normalization,
-hydration safety, defensive parsing) and the Service Worker caching strategies are
-behaviorally rich but **untested**. Future changes to `lib/cards.ts` shapes or the
-storage format could silently break restore logic.
+The Service Worker caching strategies are behaviorally rich but **untested**.
+Future changes to `lib/cards.ts` shapes could silently break rendering.
 
 ### 2. (Medium) Manual SW cache versioning
 
@@ -617,34 +596,28 @@ precached shell means clients may serve a stale shell offline. This is
 **mitigated** by the network-first navigation strategy (HTML/content stays
 fresh online), so it is a known, accepted trade-off rather than a hidden bug.
 
-### 3. (Low) `allowJs: true`
-
-`tsconfig.json` permits JavaScript files, weakening type-safety guarantees.
-Unnecessary here since the only non-TS file is the intentionally-plain-JS SW
-(served as a static asset, outside the TS program).
-
-### 4. (Low) Render-blocking Google Fonts
+### 3. (Low) Render-blocking Google Fonts
 
 The font stylesheet `<link>` blocks first paint and adds a third-party dependency.
 The code-comment roadmap calls for migrating to `next/font` (self-hosting +
 performance).
 
-### 5. (Low) No license file
+### 4. (Low) No license file
 
 Reuse terms are currently undefined. Add a `LICENSE` file (e.g. MIT or
 Apache-2.0) and reference it from `package.json`.
 
-### 6. (Low) No lint/format tooling
+### 5. (Low) No lint/format tooling
 
 No ESLint or Prettier configuration; consistency relies on discipline.
 
-### 7. (Informational) Offline-page fonts
+### 6. (Informational) Offline-page fonts
 
 `public/offline.html` includes a Google Fonts link. If offline and the SW's font
 cache is empty (e.g. a first-ever visit went offline immediately), the page
 gracefully falls back to system serif fonts (cosmetic only).
 
-### 8. (Informational) Version drift
+### 7. (Informational) Version drift
 
 `package.json` requests `^15.1.6` for Next.js while `package-lock.json` locked
 `15.5.23`. The caret range means `npm install` could pull newer 15.x patches.
@@ -682,13 +655,12 @@ questions or suggestions, please open an issue or pull request on GitHub.
 3. **`lib/types.ts`** → **`lib/cards.ts`** — understand the data model and all the content.
 4. **`app/layout.tsx`** → **`app/page.tsx`** — the execution entry points.
 5. **`components/ReadingList.tsx`** → **`components/ReadingCard.tsx`** — core UI logic.
-6. **`hooks/useCardStates.ts`** — most complex logic (state, hydration, persistence).
-7. **`app/globals.css`** — the design system (tokens, layout, responsiveness).
-8. **`public/sw.js`** — the offline engine.
-9. **`components/ServiceWorkerRegistrar.tsx`** → **`public/offline.html`**.
-10. **`hooks/usePwaInstall.ts`** → **`components/InstallButton.tsx`** — install-prompt flow.
-11. **`next.config.ts`** — the critical SW headers config.
-12. Remaining hooks/components — simple and self-explanatory.
+6. **`app/globals.css`** — the design system (tokens, layout, responsiveness).
+7. **`public/sw.js`** — the offline engine.
+8. **`components/ServiceWorkerRegistrar.tsx`** → **`public/offline.html`**.
+9. **`hooks/usePwaInstall.ts`** → **`components/InstallButton.tsx`** — install-prompt flow.
+10. **`next.config.ts`** — the critical SW headers config.
+11. Remaining hooks/components — simple and self-explanatory.
 
 ---
 
