@@ -268,6 +268,7 @@ body::before {
 }
 
 .reading-card {
+  position: relative;
   background: var(--color-card-bg);
   border: 1px solid var(--color-card-border);
   border-radius: var(--radius-lg);
@@ -296,17 +297,26 @@ body::before {
   position: relative;
 }
 
-/* Header left gradient accent */
-.card-header::before {
+/* Card left gradient accent */
+.reading-card::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 20%;
-  height: 60%;
-  width: 3px;
-  background: linear-gradient(to bottom, var(--color-emerald-primary), var(--color-gold-accent));
-  border-radius: 0 3px 3px 0;
-  opacity: 0.6;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--color-emerald-primary), var(--color-gold-accent), var(--color-emerald-primary));
+  background-size: 100% 200%;
+  border-radius: 0;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.25);
+  opacity: 0.75;
+  animation: gradient-flow 3s ease-in-out infinite;
+}
+
+@keyframes gradient-flow {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
 }
 
 .item-title {
