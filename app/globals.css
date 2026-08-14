@@ -290,26 +290,10 @@ body::before {
 /* Card Header */
 .card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 1.35rem 1.75rem;
-  cursor: pointer;
-  user-select: none;
   background: transparent;
-  transition: background-color var(--transition-fast);
   position: relative;
-  gap: 1rem;
-}
-
-.card-header:hover,
-.card-header:focus-visible {
-  background: var(--color-header-bg);
-  outline: none;
-}
-
-.card-header:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--color-emerald-primary);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 /* Header left gradient accent */
@@ -323,11 +307,6 @@ body::before {
   background: linear-gradient(to bottom, var(--color-emerald-primary), var(--color-gold-accent));
   border-radius: 0 3px 3px 0;
   opacity: 0.6;
-  transition: opacity var(--transition-fast);
-}
-
-.reading-card:hover .card-header::before {
-  opacity: 1;
 }
 
 .item-title {
@@ -340,67 +319,9 @@ body::before {
   word-break: break-word;
 }
 
-.expand-indicator {
-  color: var(--color-emerald-primary);
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--color-emerald-light);
-  border: 2px solid #34d399;
-  transition:
-    background var(--transition-fast),
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
-}
-
-/* Chevron icon: sized via CSS so media queries can scale it responsively. */
-.expand-icon {
-  width: 20px;
-  height: 20px;
-  transition: transform var(--transition-bounce);
-}
-
-/* The chevron rotates 180deg when expanded (points up = "collapse"). Rotating
-   only the icon — not the whole badge — keeps the motion calm and precise. */
-.reading-card:not(.collapsed) .expand-icon {
-  transform: rotate(180deg);
-}
-
-.reading-card:not(.collapsed) .expand-indicator {
-  background: #a7f3d0;
-  border-color: var(--color-emerald-primary);
-  box-shadow: 0 0 12px var(--color-emerald-glow);
-  color: #047857;
-}
-
-/* Subtle badge emphasis while interacting with the header. */
-.card-header:hover .expand-indicator,
-.card-header:focus-visible .expand-indicator {
-  border-color: var(--color-emerald-primary);
-}
-
-/* Card Body */
+/* Card Body — always visible (no collapse behavior). */
 .card-body {
-  max-height: 2200px;
-  opacity: 1;
   padding: 0 1.75rem 1.75rem;
-  transition:
-    max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.3s ease 0.05s,
-    padding 0.3s ease;
-  overflow: hidden;
-}
-
-.reading-card.collapsed .card-body {
-  max-height: 0 !important;
-  opacity: 0 !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  pointer-events: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -628,16 +549,6 @@ body::before {
 
   .item-title {
     font-size: 1.05rem;
-  }
-
-  .expand-indicator {
-    width: 30px;
-    height: 30px;
-  }
-
-  .expand-icon {
-    width: 18px;
-    height: 18px;
   }
 
   .card-body {
