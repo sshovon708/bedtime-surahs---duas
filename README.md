@@ -41,9 +41,9 @@ installable Progressive Web App that presents **10 short Islamic Surahs and
 Duas** for nightly recitation before sleep. Each item is displayed in three
 forms inside an always-expanded card:
 
-1. **Arabic** text (right-to-left)
-2. **Bengali transliteration** (উচ্চারণ — pronunciation)
-3. **Bengali meaning** (অর্থ — translation)
+1.  **Arabic** text (right-to-left)
+2.  **Bengali transliteration** (উচ্চারণ — pronunciation)
+3.  **Bengali meaning** (অর্থ — translation)
 
 It is built with **Next.js 15** (App Router), **React 19**, **TypeScript**, and
 **Tailwind CSS 4**, and it has **no backend, no database, no accounts, and no
@@ -136,6 +136,8 @@ PWA install path (manifest + InstallButton + usePwaInstall)
 | **npm** | Package manager (`package-lock.json`, lockfileVersion 3) |
 | **TypeScript** | Strict type checking (`tsconfig.json` — `"strict": true`, `noEmit`) |
 | **PostCSS** | CSS processing (`postcss.config.mjs` → `@tailwindcss/postcss`) |
+| **sharp** | Image processing for `scripts/generate-icons.mjs` (PWA icon generation) |
+| **@types/\*** | TypeScript type definitions (`@types/node`, `@types/react`, `@types/react-dom`) |
 
 ### Runtime Requirements
 
@@ -188,17 +190,19 @@ bedtime-surahs---duas/
 ├── lib/                                # Data & types
 │   ├── cards.ts                        # The 10 reading items (typed data source)
 │   └── types.ts                        # ReadingItem interface
-└── public/                             # Static assets (served at web root)
-    ├── apple-touch-icon.png            # iOS home-screen icon (180×180)
-    ├── favicon.png                     # Main favicon / hero logo
-    ├── favicon-32.png                  # 32×32 favicon
-    ├── offline.html                    # Standalone offline fallback page
-    ├── sw.js                           # Hand-written Service Worker
-    └── icons/                          # PWA manifest icons
-        ├── icon-192.png                # 192×192 "any" purpose
-        ├── icon-512.png                # 512×512 "any" purpose
-        ├── maskable-192.png            # 192×192 "maskable" purpose
-        └── maskable-512.png            # 512×512 "maskable" purpose
+├── public/                             # Static assets (served at web root)
+│   ├── apple-touch-icon.png            # iOS home-screen icon (180×180)
+│   ├── favicon.png                     # Main favicon / hero logo
+│   ├── favicon-32.png                  # 32×32 favicon
+│   ├── offline.html                    # Standalone offline fallback page
+│   ├── sw.js                           # Hand-written Service Worker
+│   └── icons/                          # PWA manifest icons
+│       ├── icon-192.png                # 192×192 "any" purpose
+│       ├── icon-512.png                # 512×512 "any" purpose
+│       ├── maskable-192.png            # 192×192 "maskable" purpose
+│       └── maskable-512.png            # 512×512 "maskable" purpose
+└── scripts/                            # Dev tooling
+    └── generate-icons.mjs              # PWA icon generation (sharp)
 ```
 
 ### Directory Overview
@@ -210,6 +214,7 @@ bedtime-surahs---duas/
 | `hooks/` | Reusable client-side logic | 3 hooks |
 | `lib/` | Typed reading content + contracts | `cards.ts`, `types.ts` |
 | `public/` | Static assets served as-is | `sw.js`, `offline.html`, icons, favicons |
+| `scripts/` | One-off dev tooling | `generate-icons.mjs` (PWA icon generation) |
 
 ---
 
@@ -292,12 +297,15 @@ The PWA layer is **additive** — it does not change how the app renders.
 
 `app/manifest.ts` is generated natively by Next.js and served at
 **`/manifest.webmanifest`** (name, icons, `start_url`/`scope` `"/"`,
-`display: "standalone"`, theme/background `#f0fdf4`).
+`display: "standalone"` with `display_override: ["standalone", "minimal-ui"]`,
+theme/background `#f0fdf4`).
 
 ### 2. Service Worker
 
 **`public/sw.js`** — a small, framework-free worker that precaches an app
-shell and serves content offline.
+shell, serves content offline, and listens for a `SKIP_WAITING` message
+(from a potential future update-prompt UI) to activate a waiting worker
+immediately.
 
 ### 3. Registration
 
@@ -342,7 +350,7 @@ caching.
 Caches are versioned by a single constant at the top of `public/sw.js`:
 
 ```js
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v3";
 ```
 
 On `activate`, the worker deletes only its **own** obsolete caches (prefix
@@ -358,7 +366,7 @@ caches.
 precached shell, the offline page, or want to guarantee a clean cache state):
 
 1. Make your application changes.
-2. Bump `CACHE_VERSION` in `public/sw.js` (`"v1"` → `"v2"`, …).
+2. Bump `CACHE_VERSION` in `public/sw.js` (`"v3"` → `"v4"`, …).
 3. `npm run build`.
 4. Deploy.
 5. Verify: on next visit a new SW installs; after all tabs close and reopen, the
@@ -417,6 +425,7 @@ npm start
 | `dev` | `next dev` | Development server (SW disabled) |
 | `build` | `next build` | Optimized production build (includes TS type-check) |
 | `start` | `next start` | Serve the production build (SW active) |
+| `typecheck` | `tsc --noEmit` | Explicit TypeScript type-check only (no build) |
 
 ---
 
@@ -649,18 +658,17 @@ questions or suggestions, please open an issue or pull request on GitHub.
 
 ### Recommended Reading Order for a New Developer
 
-1. **`README.md`** (this file) — always first; covers stack, scripts, PWA
-   architecture, offline behavior, cache management.
-2. **`package.json`** — see the 4 runtime + 6 dev dependencies; confirms how lean.
-3. **`lib/types.ts`** → **`lib/cards.ts`** — understand the data model and all the content.
-4. **`app/layout.tsx`** → **`app/page.tsx`** — the execution entry points.
-5. **`components/ReadingList.tsx`** → **`components/ReadingCard.tsx`** — core UI logic.
-6. **`app/globals.css`** — the design system (tokens, layout, responsiveness).
-7. **`public/sw.js`** — the offline engine.
-8. **`components/ServiceWorkerRegistrar.tsx`** → **`public/offline.html`**.
-9. **`hooks/usePwaInstall.ts`** → **`components/InstallButton.tsx`** — install-prompt flow.
+1.  **`README.md`** (this file) — always first; covers stack, scripts, PWA
+    architecture, offline behavior, cache management.
+2.  **`package.json`** — see the 4 runtime + 7 dev dependencies; confirms how lean.
+3.  **`lib/types.ts`** → **`lib/cards.ts`** — understand the data model and all the content.
+4.  **`app/layout.tsx`** → **`app/page.tsx`** — the execution entry points.
+5.  **`components/ReadingList.tsx`** → **`components/ReadingCard.tsx`** — core UI logic.
+6.  **`app/globals.css`** — the design system (tokens, layout, responsiveness).
+7.  **`public/sw.js`** — the offline engine.
+8.  **`components/ServiceWorkerRegistrar.tsx`** → **`public/offline.html`**.
+9.  **`hooks/usePwaInstall.ts`** → **`components/InstallButton.tsx`** — install-prompt flow.
 10. **`next.config.ts`** — the critical SW headers config.
 11. Remaining hooks/components — simple and self-explanatory.
 
 ---
-
