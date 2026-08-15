@@ -297,14 +297,21 @@ body::before {
   position: relative;
 }
 
-/* Card left gradient accent */
+/* Card left gradient accent.
+   top:0 + bottom:0 (with height:auto) stretches the pseudo-element between the
+   top and bottom edges of the positioned containing block (.reading-card is
+   position:relative). This is more reliable than height:100% because it adapts
+   to the card's actual computed height regardless of content length, wrapping,
+   font-size, or media-query padding changes — no separate mobile override is
+   needed and the bar always spans the full card height. */
 .reading-card::before {
   content: "";
   position: absolute;
   left: 0;
   top: 0;
+  bottom: 0;
   width: 4px;
-  height: 100%;
+  height: auto;
   background: linear-gradient(180deg, var(--color-emerald-primary), var(--color-gold-accent), var(--color-emerald-primary));
   background-size: 100% 200%;
   border-radius: 0;
@@ -550,13 +557,6 @@ body::before {
 
   .card-header {
     padding: 1.1rem 1.25rem;
-  }
-
-  /* The left gradient accent bar (rendered by .reading-card::before) is
-     shortened on small screens so it doesn't dominate the card. */
-  .reading-card::before {
-    top: 15%;
-    height: 70%;
   }
 
   .item-title {

@@ -60,8 +60,12 @@ async function getContentBounds(image, width, height) {
  *                              (e.g. 0.66 = central 66% safe zone)
  * @param {number} padPct     – extra transparent padding beyond safe zone
  * @param {string} outPath    – output file path
+ * @param {object} bg         – canvas background color, default transparent.
+ *                              Maskable icons MUST use an opaque background:
+ *                              Android composes transparent maskable PNGs onto
+ *                              a black tile for the PWA splash screen.
  */
-async function generateIcon(size, safePct, padPct, outPath) {
+async function generateIcon(size, safePct, padPct, outPath, bg = { r: 0, g: 0, b: 0, alpha: 0 }) {
   // 1. Load source and get content bounds
   const srcImage = sharp(SOURCE);
   const meta = await srcImage.metadata();
@@ -103,8 +107,8 @@ async function generateIcon(size, safePct, padPct, outPath) {
     .png()
     .toBuffer();
 
-  // 5. Create the output canvas with transparency and composite the content
-  //    centred both horizontally and vertically
+  // 5. Create the output canvas with the requested background and composite the
+  //    content centred both horizontally and vertically
   const offsetX = Math.round((size - scaledW) / 2);
   const offsetY = Math.round((size - scaledH) / 2);
 
@@ -113,7 +117,7 @@ async function generateIcon(size, safePct, padPct, outPath) {
       width: size,
       height: size,
       channels: 4,
-      background: { r: 0, g: 0, b: 0, alpha: 0 },
+      background: bg,
     },
   })
     .composite([
@@ -141,8 +145,13 @@ async function main() {
   console.log("");
 
   // === Maskable icons: 66% safe zone (Android adaptive icon standard) ===
-  await generateIcon(192, 0.66, 0, resolve(ICONS_DIR, "maskable-192.png"));
-  await generateIcon(512, 0.66, 0, resolve(ICONS_DIR, "maskable-512.png"));
+  // Android renders the PWA splash screen by compositing the maskable icon
+  // onto a black tile when the PNG has no opaque background. Give maskable
+  // icons the app's light mint background (#f0fdf4 → rgb(240, 253, 244)) so
+  // the splash/loading screen matches the app instead of showing black.
+  const MINT_BG = { r: 240, g: 253, b: 244, alpha: 255 };
+  await generateIcon(192, 0.66, 0, resolve(ICONS_DIR, "maskable-192.png"), MINT_BG);
+  await generateIcon(512, 0.66, 0, resolve(ICONS_DIR, "maskable-512.png"), MINT_BG);
 
   // === Standard icons: 76% safe zone (12% padding on each side) ===
   await generateIcon(192, 0.76, 0, resolve(ICONS_DIR, "icon-192.png"));
