@@ -13,8 +13,8 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "ঘুমানোর পূর্বের সূরা ও দোয়া | Bedtime Surahs & Duas",
-    short_name: "ঘুমানোর সূরা ও দোয়া",
+    name: "ঘুমের আমল",
+    short_name: "ঘুমের আমল",
     description:
       "আল্লাহর সন্তুষ্টি ও বরকতের আশায় প্রতিরাতে পাঠের জন্য একটি ব্যক্তিগত সংগ্রহ",
     start_url: "/",

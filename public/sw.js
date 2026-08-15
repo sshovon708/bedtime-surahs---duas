@@ -22,7 +22,7 @@
  */
 
 // Bump CACHE_VERSION to roll all caches on the next deploy.
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const CACHE_PREFIX = "bedtime-duas";
 const PRECACHE = `${CACHE_PREFIX}-precache-${CACHE_VERSION}`;
 const RUNTIME = `${CACHE_PREFIX}-runtime-${CACHE_VERSION}`;

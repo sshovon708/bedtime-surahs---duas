@@ -5,7 +5,7 @@ export default function HeroSection() {
     <header className="top-title-section">
       <div className="moon-symbol">
         <Image
-          src="/favicon.png"
+          src="/icons/icon-192.png"
           alt="ঘুমানোর পূর্বের সূরা ও দোয়া লোগো"
           width={96}
           height={96}
