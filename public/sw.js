@@ -22,7 +22,7 @@
  */
 
 // Bump CACHE_VERSION to roll all caches on the next deploy.
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v3";
 const CACHE_PREFIX = "bedtime-duas";
 const PRECACHE = `${CACHE_PREFIX}-precache-${CACHE_VERSION}`;
 const RUNTIME = `${CACHE_PREFIX}-runtime-${CACHE_VERSION}`;
@@ -57,7 +57,7 @@ self.addEventListener("install", (event) => {
     (async () => {
       const cache = await caches.open(PRECACHE);
       // Use individual puts so one missing optional asset (e.g. an icon renamed
-      // later) can't abort the whole install the way cache.addAll would.
+      // later) can't abort the whole install the way cacheaddAll would.
       await Promise.all(
         PRECACHE_URLS.map(async (url) => {
           try {
