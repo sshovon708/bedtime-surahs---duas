@@ -14,8 +14,9 @@ export default function Home() {
         {/* Top Hero Title */}
         <HeroSection />
 
-        {/* Subtle, self-hiding PWA install action (renders nothing unless the
-            browser offers an install prompt and the app isn't already installed). */}
+        {/* Cross-browser PWA install action. Visible whenever the app isn't
+            already installed; uses native install where available, otherwise
+            shows browser-specific installation instructions. */}
         <InstallButton />
 
         {/* Surahs & Duas Collapsible Reading List */}

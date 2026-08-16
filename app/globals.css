@@ -713,3 +713,173 @@ body::before {
     0 0 0 3px #ffffff,
     0 0 0 5px var(--color-emerald-primary);
 }
+
+/* --------------------------------------------------------------------------
+   13. Install Instructions Modal (cross-browser install guidance)
+   Shown when the browser doesn't expose a native install prompt (iOS Safari,
+   Safari macOS, Firefox, other browsers). Reuses the existing emerald palette.
+   -------------------------------------------------------------------------- */
+.install-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: install-modal-fade 0.2s ease-out;
+}
+
+@keyframes install-modal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.install-modal {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  padding: 2rem 1.75rem 1.75rem;
+  animation: install-modal-rise 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes install-modal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.install-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.install-modal-close:hover {
+  background: var(--color-emerald-light);
+  color: var(--color-emerald-deep);
+}
+
+.install-modal-close:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px #ffffff,
+    0 0 0 5px var(--color-emerald-primary);
+}
+
+.install-modal-content {
+  text-align: center;
+}
+
+.install-modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-emerald-deep);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.install-modal-subtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.install-modal-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+.install-modal-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-bengali-pron-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.install-modal-steps li strong {
+  color: var(--color-emerald-deep);
+  font-weight: 700;
+}
+
+.install-modal-step-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-emerald-light);
+  color: var(--color-emerald-primary);
+}
+
+.install-modal-list li {
+  align-items: flex-start;
+}
+
+@media (max-width: 480px) {
+  .install-modal {
+    padding: 1.75rem 1.25rem 1.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .install-modal-title {
+    font-size: 1.2rem;
+  }
+
+  .install-modal-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .install-modal-steps li {
+    font-size: 0.88rem;
+    padding: 0.75rem 0.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .install-modal-backdrop,
+  .install-modal {
+    animation: none;
+  }
+}
